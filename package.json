@@ -1,0 +1,39 @@
+{
+  "name": "wisestart-tdd",
+  "version": "1.0.0",
+  "description": "WiseStart Academy Test First Development Workshop",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "lint": "eslint '**/*.ts?(x)' --color --ignore-path .gitignore --cache",
+    "lint:fix": "eslint '**/*.ts?(x)' --fix --color --ignore-path .gitignore --cache",
+    "test": "npm run test:pact && npm run test:integration",
+    "test:integration": "jest --config=jest.integration.config.js",
+    "test:e2e": "POKE_API_URL=https://pokeapi.co/api/v2 POKEMON_FROM_ID=172 POKEMON_TO_ID=25 concurrently \"npm run start\" \"npm run test:integration\"",
+    "test:pact": "jest --config=jest.pact.config.js",
+    "serve:pact": "$(find . -name pact-stub-service | grep -e 'bin/pact-stub-service$' | head -n 1) ./pact/pacts/PokemonEvolver-PokeAPI.json --port 8080"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@pact-foundation/pact": "^12.1.1",
+    "@pact-foundation/pact-node": "^10.17.7",
+    "@types/debug": "^4.1.12",
+    "@types/jest": "^29.5.8",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "axios": "^1.6.1",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.53.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.1.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "await-sleep": "^0.0.1",
+    "debug": "^4.3.4",
+    "kafkajs": "^2.2.4",
+    "ts-node": "^10.9.1"
+  }
+}

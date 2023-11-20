@@ -1,0 +1,110 @@
+{
+  "consumer": {
+    "name": "PokemonEvolver"
+  },
+  "interactions": [
+    {
+      "description": "a request to get 1 data",
+      "providerState": "Pokemon API is available",
+      "request": {
+        "method": "GET",
+        "path": "/evolution-chain/1"
+      },
+      "response": {
+        "body": {
+          "chain": {
+            "evolves_to": [
+              {
+                "species": {
+                  "name": "ivysaur"
+                }
+              }
+            ]
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get bulbasaur data",
+      "providerState": "Pokemon API is available",
+      "request": {
+        "method": "GET",
+        "path": "/pokemon/1"
+      },
+      "response": {
+        "body": {
+          "base_experience": 64,
+          "id": 1,
+          "name": "bulbasaur",
+          "species": {
+            "url": "http://localhost:8080/pokemon-species/1"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get ivysaur data",
+      "providerState": "Pokemon API is available",
+      "request": {
+        "method": "GET",
+        "path": "/pokemon/ivysaur"
+      },
+      "response": {
+        "body": {
+          "base_experience": 142,
+          "id": 2,
+          "name": "ivysaur",
+          "species": {
+            "url": "http://localhost:8080/pokemon-species/2"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get species 1 data",
+      "providerState": "Pokemon API is available",
+      "request": {
+        "method": "GET",
+        "path": "/pokemon-species/1"
+      },
+      "response": {
+        "body": {
+          "evolution_chain": {
+            "url": "http://localhost:8080/evolution-chain/1"
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.1.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.9",
+      "models": "1.1.11"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "PokeAPI"
+  }
+}
