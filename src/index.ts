@@ -1,11 +1,13 @@
 import { Kafka, logLevel, Partitioners } from 'kafkajs';
 
+const KAFKA_HOST = process.env.KAFKA_HOST as string;
+
 (async () => {
 
   const kafka = new Kafka({
     logLevel: logLevel.INFO,
     clientId: 'pokemon-evolver',
-    brokers: [`127.0.0.1:9092`],
+    brokers: [KAFKA_HOST],
     retry: {
       maxRetryTime: 10000,
       initialRetryTime: 10000,

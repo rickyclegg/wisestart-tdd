@@ -1,7 +1,7 @@
 import { TestKafka } from './helpers/test-kafka';
 import { EachMessagePayload } from 'kafkajs';
 
-const KAFKA_HOST = `127.0.0.1:9092`;
+const KAFKA_HOST = process.env.KAFKA_HOST as string;
 describe('Integration Tests', () => {
 
   it('should evolve bulbasaur to ivysaur given his new experience', async () => {

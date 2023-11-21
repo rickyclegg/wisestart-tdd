@@ -4,11 +4,11 @@
   "description": "WiseStart Academy Test First Development Workshop",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "KAFKA_HOST=127.0.0.1:9092 ts-node ./src/index.ts",
     "lint": "eslint '**/*.ts?(x)' --color --ignore-path .gitignore --cache",
     "lint:fix": "eslint '**/*.ts?(x)' --fix --color --ignore-path .gitignore --cache",
     "test": "npm run test:pact && npm run test:integration",
-    "test:integration": "DEBUG=test-kafka jest --config=jest.integration.config.js",
+    "test:integration": "DEBUG=test-kafka KAFKA_HOST=127.0.0.1:9092 jest --config=jest.integration.config.js",
     "test:e2e": "POKE_API_URL=https://pokeapi.co/api/v2 POKEMON_FROM_ID=172 POKEMON_TO_ID=25 concurrently \"npm run start\" \"npm run test:integration\"",
     "test:pact": "jest --config=jest.pact.config.js",
     "serve:pact": "$(find . -name pact-stub-service | grep -e 'bin/pact-stub-service$' | head -n 1) ./pact/pacts/PokemonEvolver-PokeAPI.json --port 8080"
