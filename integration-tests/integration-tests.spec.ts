@@ -1,29 +1,46 @@
 import { TestKafka } from './helpers/test-kafka';
+import { EachMessagePayload } from 'kafkajs';
 
+const KAFKA_HOST = `127.0.0.1:9092`;
 describe('Integration Tests', () => {
+
   it('should evolve bulbasaur to ivysaur given his new experience', async () => {
-    const testKafka = new TestKafka({
-      host: `127.0.0.1:9092` as string,
-      clientId: 'integration-tests',
-      topics: ['pokemon-evolved']
-    });
+    const BATTLE_ENDED_TOPIC = 'battle-ended';
+    const POKEMON_EVOLVED_TOPIC = 'pokemon-evolved';
+    const BULBASAUR_ID = 1;
+    const EVOLVED_POKEMON_ID = 2;
 
-    await testKafka.start();
+    const testKafka = await createTestKafka(POKEMON_EVOLVED_TOPIC)
 
-    const waitForMessage = testKafka.waitForMessage('pokemon-evolved');
+    const waitForMessage = testKafka.waitForMessage(POKEMON_EVOLVED_TOPIC)
 
-    await testKafka.send('battle-ended', JSON.stringify({
-      key: 'pokemon',
-      value: JSON.stringify({ id: 1, xp: 64, xpGained: 300 })
+    await testKafka.send(BATTLE_ENDED_TOPIC, JSON.stringify({
+      value: JSON.stringify({ id: BULBASAUR_ID, xp: 64, xpGained: 300 })
     }));
 
-    const payload = await waitForMessage()
-    const data = JSON.parse(<string>payload.message.value?.toString())
+    const { payload, data } = await waitForPokemonToEvolve(waitForMessage)
 
-    expect(payload?.topic).toEqual('pokemon-evolved');
-    expect(data.from).toEqual(1);
-    expect(data.to).toEqual(2);
+    expect(payload?.topic).toEqual(POKEMON_EVOLVED_TOPIC)
+    expect(data.from).toEqual(BULBASAUR_ID);
+    expect(data.to).toEqual(EVOLVED_POKEMON_ID);
 
     await testKafka.stop();
   });
+
+  async function createTestKafka(POKEMON_EVOLVED_TOPIC: string) {
+    const testKafka = new TestKafka({
+      host: KAFKA_HOST,
+      clientId: 'integration-tests',
+      topics: [POKEMON_EVOLVED_TOPIC],
+    })
+
+    await testKafka.start()
+    return testKafka
+  }
+
+  async function waitForPokemonToEvolve(waitForMessage: () => Promise<EachMessagePayload>) {
+    const payload = await waitForMessage()
+    const data = JSON.parse(<string>payload.message.value?.toString())
+    return { payload, data }
+  }
 });
