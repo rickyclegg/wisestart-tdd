@@ -17,7 +17,7 @@ interface PokemonDTO {
 const KAFKA_HOST = process.env.KAFKA_HOST as string
 const CLIENT_ID = 'pokemon-evolver'
 const GROUP_ID = `${CLIENT_ID}-${Math.floor(Math.random() * 1000)}`
-const POKE_API_URL = 'http://localhost:8080'
+const POKE_API_URL = 'http://127.0.0.1:8080'
 
 ;(async () => {
   log(`Connecting to Kafka: ${KAFKA_HOST}`)
