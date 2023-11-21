@@ -17,7 +17,7 @@ interface PokemonDTO {
 const KAFKA_HOST = process.env.KAFKA_HOST as string
 const CLIENT_ID = 'pokemon-evolver'
 const GROUP_ID = `${CLIENT_ID}-${Math.floor(Math.random() * 1000)}`
-const POKE_API_URL = 'http://127.0.0.1:8080'
+const POKE_API_URL = process.env.POKE_API_URL as string ?? 'http://127.0.0.1:8080'
 
 ;(async () => {
   log(`Connecting to Kafka: ${KAFKA_HOST}`)
@@ -54,10 +54,14 @@ const POKE_API_URL = 'http://127.0.0.1:8080'
       const battleData = JSON.parse(messageValue.value)
 
       const pokemon: AxiosResponse<PokemonDTO> = await axios.get(`${POKE_API_URL}/pokemon/${battleData.id}`)
+      log(`Pokemon ${pokemon.data.name} has ${pokemon.data.base_experience} xp`)
+
       const species = await axios.get(pokemon.data.species.url)
       const evolutionChain = await axios.get(species.data.evolution_chain.url)
 
       const evolvesTo = evolutionChain.data.chain.evolves_to[0]
+      log(`Pokemon ${pokemon.data.name} evolves to ${evolvesTo.species.name}`)
+
       const nextPokemon: AxiosResponse<PokemonDTO> = await axios.get(`${POKE_API_URL}/pokemon/${evolvesTo.species.name}`)
 
       log(`Send message >>> ${POKEMON_EVOLVED_TOPIC}`)
