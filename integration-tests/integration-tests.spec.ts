@@ -1,12 +1,11 @@
 import { TestKafka } from './helpers/test-kafka';
 import { EachMessagePayload } from 'kafkajs';
+import { BATTLE_ENDED_TOPIC, POKEMON_EVOLVED_TOPIC } from '../src/topics';
 
 const KAFKA_HOST = process.env.KAFKA_HOST as string;
 describe('Integration Tests', () => {
 
   it('should evolve bulbasaur to ivysaur given his new experience', async () => {
-    const BATTLE_ENDED_TOPIC = 'battle-ended';
-    const POKEMON_EVOLVED_TOPIC = 'pokemon-evolved';
     const BULBASAUR_ID = 1;
     const EVOLVED_POKEMON_ID = 2;
 
